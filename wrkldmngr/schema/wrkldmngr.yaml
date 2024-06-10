@@ -1,0 +1,22 @@
+slurm:
+  directive: "#SBATCH"
+  launcher: "sbatch"
+  mapping:
+    - name: "--job-name="
+    - stdout: "--output="
+    - stderr: "--error="
+    - maxtime: "--time="
+    - tasks: "--ntasks="
+    - nodes: "--nodes="
+    - memory: "--memory="
+
+pbs:
+  directive: "#PBS"
+  launcher: "qsub"
+  mapping:
+    - name: "-N"
+    - stdout: "-o"
+    - stderr: "-e"
+    - maxtime: "-l walltime="
+    - tasks: "-l nodes="
+    - memory: "-l mem="
