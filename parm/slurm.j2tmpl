@@ -6,3 +6,4 @@
 #SBATCH --cpus-per-task={{ CPUS_PER_TASK }}
 #SBATCH --time={{ TIME }}
 {{ SCRIPT }}
+{{ ANNOTATION }}

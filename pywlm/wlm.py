@@ -27,12 +27,12 @@ __all__ = ["WorkfloadManager"]
 # ----
 
 
-class WorkloadManager(ABC):
+class WorkloadManager:
     """
 
     """
 
-    def __init__(self: ABC, wrkldmngr: str, shell: str, *args: Tuple, **kwargs: Dict):
+    def __init__(self: Generic, wrkldmngr: str, shell: str, *args: Tuple, **kwargs: Dict):
         """
         Description
         -----------
@@ -53,7 +53,7 @@ class WorkloadManager(ABC):
             self.header = "#!/usr/bin/env bash"
 
     @privatemethod
-    def config(self: ABC) -> Dict:
+    def config(self: Generic) -> Dict:
         """
         Description
         -----------
@@ -91,7 +91,7 @@ class WorkloadManager(ABC):
         return wrkldmngr_dict
 
     @app_exec
-    async def submit(self: ABC, output_file: str) -> None:
+    async def submit(self: Generic, output_file: str) -> None:
         """
 
         """
@@ -113,7 +113,7 @@ class WorkloadManager(ABC):
         return exec_obj
 
     @privatemethod
-    def write(self: ABC, wlm_dict: Dict, output_file: str) -> None:  # TODO
+    def write(self: Generic, wlm_dict: Dict, output_file: str) -> None:  # TODO
         """
 
 
@@ -124,11 +124,10 @@ class WorkloadManager(ABC):
             dict_in=wlm_dict, lowercase=True, uppercase=True)
         tmpl_path = parser_interface.dict_key_value(
             dict_in=self.wrkldmngr_dict, key="template", force=True, no_split=True)
-
         write_from_template(tmpl_path=tmpl_path, output_file=output_file, in_dict=wlm_dict,
                             skip_missing=True)
 
-    async def run(self: ABC, wlm_dict: Dict, output_file: str) -> None:
+    async def run(self: Generic, wlm_dict: Dict, output_file: str, annotate: str) -> None:
         """
 
         """
