@@ -4,7 +4,7 @@
 
 # ----
 
-from wrkldmngr.wrkldmngr import WorkloadManager
+from pywlm.wlm import WorkloadManager
 from typing import Dict, Tuple
 from tools import system_interface
 
@@ -21,7 +21,7 @@ class SLURM(WorkloadManager):
 
     """
 
-    def __init__(self: WorkloadManager, bash: bool = True, *args: Tuple, **kwargs: Dict):
+    def __init__(self: WorkloadManager, shell: str = "bash", *args: Tuple, **kwargs: Dict):
         """
         Description
         -----------
@@ -31,12 +31,4 @@ class SLURM(WorkloadManager):
         """
 
         # Define the base-class attributes.
-        super().__init__(wrkldmngr="slurm", bash=bash, *args, **kwargs)
-
-    def run(self: WorkloadManager) -> None:
-        """
-
-        """
-
-        self.write()
-        self.submit()
+        super().__init__(wrkldmngr="slurm", shell=shell, *args, **kwargs)
