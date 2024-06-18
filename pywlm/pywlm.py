@@ -47,10 +47,20 @@ class WorkloadManager:
         self.wrkldmngr = wrkldmngr
         self.schema_file = os.path.join(parser_interface.enviro_get(envvar="WRKLDMNGR_ROOT"),
                                         "schema", "wrkldmngr.yaml")
-
         self.wrkldmngr_dict = self.config()
-        if shell.lower() == "bash":
-            self.header = "#!/usr/bin/env bash"
+        self.shell_obj = self.shell_info(shell=shell)
+
+        self.wrkldmngr_dict = (parser_interface.dict_merge(
+            dict1=dict(self.wrkldmngr_dict), dict2=dict(dict2)) for dict2 in [
+                kwargs, parser_interface.object_todict(object_in=self.shell_obj)])
+
+        print(dict(self.wrkldmngr_dict))
+        quit()
+
+        # self.wrkldmngr_dict = parser_interface.dict_merge(
+        #    dict1=self.wrkldmngr_dict, dict2=kwargs)
+        # self.wrkldmngr_dict = parser_interface.dict_merge(
+        #    dict1=self.wrkldmngr_dict, dict2=
 
     @privatemethod
     def config(self: Generic) -> Dict:
@@ -90,6 +100,20 @@ class WorkloadManager:
 
         return wrkldmngr_dict
 
+    @privatemethod
+    def shell_info(self: Generic, shell: str) -> SimpleNamespace:
+        """
+
+        """
+
+        # Collect the execution shell attributes.
+        shell_obj = parser_interface.object_define()
+        shell_obj.shell = shell
+        shell_obj.path = get_app_path(app=shell_obj.shell)
+        shell_obj.header = f"#!{shell_obj.path}"
+
+        return shell_obj
+
     @app_exec
     async def submit(self: Generic, output_file: str) -> None:
         """
@@ -107,19 +131,19 @@ class WorkloadManager:
 
         exec_obj = parser_interface.object_define()
         exec_obj.exec_path = f"{app_path} {output_file}"
-        exec_obj.run_path = "./"
+        exec_obj.run_path = os.path.dirname(output_file)
         exec_obj.scheduler = self.wrkldmngr
 
         return exec_obj
 
     @privatemethod
-    def write(self: Generic, wlm_dict: Dict, output_file: str) -> None:  # TODO
+    async def write(self: Generic, wlm_dict: Dict, output_file: str) -> None:  # TODO
         """
 
 
         """
 
-        wlm_dict["header"] = self.header
+        wlm_dict["header"] = self.shell_obj.header
         wlm_dict = parser_interface.dict_key_case(
             dict_in=wlm_dict, lowercase=True, uppercase=True)
         tmpl_path = parser_interface.dict_key_value(
@@ -132,5 +156,5 @@ class WorkloadManager:
 
         """
 
-        self.write(wlm_dict=wlm_dict, output_file=output_file)
+        await self.write(wlm_dict=wlm_dict, output_file=output_file)
         await self.submit(output_file=output_file)

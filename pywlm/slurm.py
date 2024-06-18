@@ -4,7 +4,7 @@
 
 # ----
 
-from pywlm.wlm import WorkloadManager
+from pywlm.pywlm import WorkloadManager
 from typing import Dict, Tuple
 from tools import system_interface
 
