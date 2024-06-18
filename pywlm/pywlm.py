@@ -49,18 +49,10 @@ class WorkloadManager:
                                         "schema", "wrkldmngr.yaml")
         self.wrkldmngr_dict = self.config()
         self.shell_obj = self.shell_info(shell=shell)
-
-        self.wrkldmngr_dict = (parser_interface.dict_merge(
-            dict1=dict(self.wrkldmngr_dict), dict2=dict(dict2)) for dict2 in [
-                kwargs, parser_interface.object_todict(object_in=self.shell_obj)])
-
-        print(dict(self.wrkldmngr_dict))
-        quit()
-
-        # self.wrkldmngr_dict = parser_interface.dict_merge(
-        #    dict1=self.wrkldmngr_dict, dict2=kwargs)
-        # self.wrkldmngr_dict = parser_interface.dict_merge(
-        #    dict1=self.wrkldmngr_dict, dict2=
+        self.wrkldmngr_dict = parser_interface.dict_merge(
+            dict1=self.wrkldmngr_dict,dict2=parser_interface.object_todict(object_in=self.shell_obj))
+        self.wrkldmngr_dict = dict(parser_interface.dict_merge(
+            dict1=dict(self.wrkldmngr_dict),dict2=kwargs))
 
     @privatemethod
     def config(self: Generic) -> Dict:
