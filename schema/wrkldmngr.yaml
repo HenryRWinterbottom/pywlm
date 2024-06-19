@@ -1,3 +1,0 @@
-slurm:
-  launcher: "sbatch"
-  template: !ENV ${WRKLDMNGR_ROOT}/parm/slurm.j2tmpl
