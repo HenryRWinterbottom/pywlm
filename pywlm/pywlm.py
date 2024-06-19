@@ -159,8 +159,11 @@ class WorkloadManager:
             raise WorkloadManagerError(msg=msg)
         exec_obj = parser_interface.object_define()
         exec_obj.exec_path = f"{app_path} {output_file}"
-        exec_obj.run_path = os.path.dirname(output_file)
+        exec_obj.run_path = os.getcwd() #os.path.dirname(output_file)
         exec_obj.scheduler = self.wrkldmngr
+
+        print(exec_obj)
+        quit()
 
         return exec_obj
 
