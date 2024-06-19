@@ -50,9 +50,9 @@ class WorkloadManager:
         self.wrkldmngr_dict = self.config()
         self.shell_obj = self.shell_info(shell=shell)
         self.wrkldmngr_dict = parser_interface.dict_merge(
-            dict1=self.wrkldmngr_dict,dict2=parser_interface.object_todict(object_in=self.shell_obj))
+            dict1=self.wrkldmngr_dict, dict2=parser_interface.object_todict(object_in=self.shell_obj))
         self.wrkldmngr_dict = dict(parser_interface.dict_merge(
-            dict1=dict(self.wrkldmngr_dict),dict2=kwargs))
+            dict1=dict(self.wrkldmngr_dict), dict2=kwargs))
 
     @privatemethod
     def config(self: Generic) -> Dict:
@@ -95,6 +95,34 @@ class WorkloadManager:
     @privatemethod
     def shell_info(self: Generic, shell: str) -> SimpleNamespace:
         """
+        Description
+        -----------
+
+        This method returns the attributes for the workload manager
+        application shell.
+
+        Parameters
+        ----------
+
+        shell: ``str``
+
+            A Python string specifying the supported Linux shell.
+
+        Returns
+        -------
+
+        shell_obj: ``SimpleNamespace``
+
+            A Python SimpleNamespace object containing the supported
+            Linux shell attributes.
+
+        Raises
+        ------
+
+        WorkloadManager:
+
+            - raised if the path for the respective Linux shell cannot
+              be determined for the respective platform.
 
         """
 
@@ -102,6 +130,11 @@ class WorkloadManager:
         shell_obj = parser_interface.object_define()
         shell_obj.shell = shell
         shell_obj.path = get_app_path(app=shell_obj.shell)
+        if shell_obj.path is None:
+            msg = (f"The shell {shell} is not supported and/or could not be "
+                   "determined for the respective platform. Aborting!!!"
+                   )
+            raise WorkloadManagerError(msg=msg)
         shell_obj.header = f"#!{shell_obj.path}"
 
         return shell_obj
@@ -115,12 +148,15 @@ class WorkloadManager:
         launcher = parser_interface.dict_key_value(
             dict_in=self.wrkldmngr_dict, key="launcher", force=True, no_split=True)
         if launcher is None:
-            raise AttributeError  # TODO
-
+            msg = ("The launcher attribute could not be determined from "
+                   f"{self.schema_file}. Aborting!!!"
+                   )
+            raise WorkloadManagerError(msg=msg)
         app_path = get_app_path(app=launcher)
         if app_path is None:
-            raise AttributeError  # TODO
-
+            msg = (f"The executable file {launcher} could not be determined "
+                   "and/or located. Aborting!!!")
+            raise WorkloadManagerError(msg=msg)
         exec_obj = parser_interface.object_define()
         exec_obj.exec_path = f"{app_path} {output_file}"
         exec_obj.run_path = os.path.dirname(output_file)
@@ -129,19 +165,49 @@ class WorkloadManager:
         return exec_obj
 
     @privatemethod
-    async def write(self: Generic, wlm_dict: Dict, output_file: str) -> None:  # TODO
+    async def write(self: Generic, wlm_dict: Dict, output_file: str) -> None:
+        """
+        Description
+        -----------
+
+        This method writes the workload manager job script.
+
+        Parameters
+        ----------
+
+        wlm_dict: ``Dict``
+
+            A Python dictionary containing the workload manager
+            attributes.
+
+        output_file: ``str``
+
+            A Python string specifying the path to the workflow
+            manager job script.
+
+        Raises
+        ------
+
+        WorkloadManagerError:
+
+            - raised if an exception is encountered while
+              building/writing the workload manager job script.
+
         """
 
-
-        """
-
-        wlm_dict["header"] = self.shell_obj.header
-        wlm_dict = parser_interface.dict_key_case(
-            dict_in=wlm_dict, lowercase=True, uppercase=True)
-        tmpl_path = parser_interface.dict_key_value(
-            dict_in=self.wrkldmngr_dict, key="template", force=True, no_split=True)
-        write_from_template(tmpl_path=tmpl_path, output_file=output_file, in_dict=wlm_dict,
-                            skip_missing=True)
+        try:
+            wlm_dict["header"] = self.shell_obj.header
+            wlm_dict = parser_interface.dict_key_case(
+                dict_in=wlm_dict, lowercase=True, uppercase=True)
+            tmpl_path = parser_interface.dict_key_value(
+                dict_in=self.wrkldmngr_dict, key="template", force=True, no_split=True)
+            write_from_template(tmpl_path=tmpl_path, output_file=output_file, in_dict=wlm_dict,
+                                skip_missing=True)
+        except Exception as errmsg:
+            msg = (f"Writing workload manager job script {output_file} failed "
+                   f"with error {errmsg}. Aborting!!!"
+                   )
+            raise WorkloadManager(msg=msg) from errmsg
 
     async def run(self: Generic, wlm_dict: Dict, output_file: str, annotate: str) -> None:
         """
