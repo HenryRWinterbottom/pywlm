@@ -54,7 +54,7 @@ from tools.system_interface import get_app_path
 from utils.decorator_interface import privatemethod
 from utils.logger_interface import Logger
 
-from exceptions import WorkloadManagerError
+from pywlm.exceptions import WorkloadManagerError
 
 # ----
 
