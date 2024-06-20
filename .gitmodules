@@ -1,0 +1,3 @@
+[submodule "sorc/ufs_pyutils"]
+	path = sorc/ufs_pyutils
+	url = http://www.github.com/HenryWinterbottom-NOAA/ufs_pyutils
