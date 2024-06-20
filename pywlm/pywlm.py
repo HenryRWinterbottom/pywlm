@@ -170,7 +170,7 @@ class WorkloadManager:
         )
         if wrkldmngr_dict is None:
             msg = (
-                f"The attributes for workfload manager {self.wrkldmngr} could not "
+                f"The attributes for workload manager {self.wrkldmngr} could not "
                 f"be determined from the schema file path {self.schema_file}. Aborting!!!"
             )
             raise WorkloadManagerError(msg=msg)
