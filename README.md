@@ -1,4 +1,4 @@
-[![License](https://img.shields.io/badge/license-LGPL_v2.1-black)](https://github.com/HenryWinterbottom-NOAA/workload_manager/LICENSE.md)
+[![License](https://img.shields.io/badge/license-LGPL_v2.1-black)](https://github.com/HenryWinterbottom-NOAA/pywlm/LICENSE.md)
 ![Linux](https://img.shields.io/badge/linux-ubuntu%7Ccentos-lightgrey)
 ![Python Version](https://img.shields.io/badge/python-3.5|3.6|3.7-blue)
 [![Code style: black](https://img.shields.io/badge/Code%20Style-black-purple.svg)](https://github.com/psf/black)
@@ -21,18 +21,18 @@ This repository utilizes several sub-modules from various sources. To
 obtain the entire system, do as follows.
 
 ~~~shell
-user@host:$ git clone --recursive https://github.com/HenryWinterbottom-NOAA/workload_manager
+user@host:$ git clone --recursive https://github.com/HenryWinterbottom-NOAA/pywlm
 ~~~
 
 # Installing Package Dependencies
 
 In order to install the respective Python packages upon which
-`workload_manager` is dependent, do as follows.
+`pywlm` is dependent, do as follows.
 
 ~~~shell
-user@host:$ cd /path/to/workload_manager
+user@host:$ cd /path/to/pywlm
 user@host:$ /path/to/pip install update
-user@host:$ /path/to/pip install -r /path/to/workload_manager/requirements.txt
+user@host:$ /path/to/pip install -r /path/to/pywlm/requirements.txt
 ~~~
 
 For additional information using `pip` and `requirements.txt` type files, see [here](https://pip.pypa.io/en/stable/reference/requirements-file-format/).
