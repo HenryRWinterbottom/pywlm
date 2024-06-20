@@ -13,7 +13,7 @@ Description
 Classes
 -------
 
-    WorkloadManager(shell, *args, **kwargs)
+    SLURM(shell, *args, **kwargs)
 
         This is the base-class object for all Simple Linux Utility for
         Resource Management (SLURM) applications; it is a sub-class of
