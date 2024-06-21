@@ -274,8 +274,8 @@ class WorkloadManager:
             )
             raise WorkloadManagerError(msg=msg)
 
-        os.chmod(output_file, 0o755)
-        subprocess.Popen(f"{app_path} {output_file}", stdout=subprocess.DEVNULL,
+        os.chmod(output_file, 0o755)./
+        subprocess.Popen([f"{app_path}", f"{output_file}"], stdout=subprocess.DEVNULL,
                          stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
         
         #exec_obj = parser_interface.object_define()
