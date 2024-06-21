@@ -42,6 +42,7 @@ History
 
 # ----
 
+import asyncio
 import os
 from types import SimpleNamespace
 from typing import Dict, Generic, Tuple
