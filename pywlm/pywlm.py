@@ -364,4 +364,4 @@ class WorkloadManager:
 
         # Build and submit the workload manager script.
         self.write(wlm_dict=wlm_dict, output_file=output_file)
-        asyncio.run(self.submit(output_file=output_file))
+        self.submit(output_file=output_file)
