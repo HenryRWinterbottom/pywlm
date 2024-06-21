@@ -290,7 +290,7 @@ class WorkloadManager:
         #exec_obj.scheduler = self.wrkldmngr
         #exec_obj.launcher = f"{app_path}"
 
-        return exec_obj
+        #return exec_obj
 
     @privatemethod
     def write(self: Generic, wlm_dict: Dict, output_file: str) -> None:
