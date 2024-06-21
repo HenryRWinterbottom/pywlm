@@ -333,7 +333,7 @@ class WorkloadManager:
             )
             raise WorkloadManagerError(msg=msg) from errmsg
 
-    async def run(
+    def run(
         self: Generic, wlm_dict: Dict, output_file: str, annotate: str
     ) -> None:
         """
@@ -352,4 +352,4 @@ class WorkloadManager:
 
         # Build and submit the workload manager script.
         self.write(wlm_dict=wlm_dict, output_file=output_file)
-        await self.submit(output_file=output_file)
+        self.submit(output_file=output_file)
