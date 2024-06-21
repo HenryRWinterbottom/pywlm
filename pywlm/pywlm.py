@@ -227,7 +227,6 @@ class WorkloadManager:
 
         return shell_obj
 
-    #@app_exec
     def submit(self: Generic, output_file: str) -> None:
         """
         Description
@@ -273,10 +272,12 @@ class WorkloadManager:
                 "and/or located. Aborting!!!"
             )
             raise WorkloadManagerError(msg=msg)
-
-        #os.chmod(output_file, 0o755)
-        subprocess.Popen([f"{app_path}", f"{output_file}"], stdout=subprocess.DEVNULL,
-                         stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
+        cmd = [f"{app_path}", f"{output_file}"]
+        proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL, 
+                                stdin=subprocess.DEVNULL)
+        msg = f"Script {output_file} submitted as job {proc.pid}."
+        self.logger.info(msg=msg)
 
     @privatemethod
     def write(self: Generic, wlm_dict: Dict, output_file: str) -> None:
