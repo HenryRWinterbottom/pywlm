@@ -274,7 +274,7 @@ class WorkloadManager:
             raise WorkloadManagerError(msg=msg)
         exec_obj = parser_interface.object_define()
         exec_obj.exec_path = f"{app_path}"
-        exec_obj.stdin = f"{output_file}"
+        exec_obj.stdin = [f"{output_file}"]
         exec_obj.run_path = os.path.dirname(output_file)
         if len(exec_obj.run_path) == 0:
             exec_obj.run_path = os.getcwd()
