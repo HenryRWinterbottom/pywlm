@@ -281,7 +281,7 @@ class WorkloadManager:
         return exec_obj
 
     @privatemethod
-    async def write(self: Generic, wlm_dict: Dict, output_file: str) -> None:
+    def write(self: Generic, wlm_dict: Dict, output_file: str) -> None:
         """
         Description
         -----------
@@ -351,5 +351,5 @@ class WorkloadManager:
         """
 
         # Build and submit the workload manager script.
-        await self.write(wlm_dict=wlm_dict, output_file=output_file)
+        self.write(wlm_dict=wlm_dict, output_file=output_file)
         await self.submit(output_file=output_file)
