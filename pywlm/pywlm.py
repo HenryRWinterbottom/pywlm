@@ -227,8 +227,8 @@ class WorkloadManager:
 
         return shell_obj
 
-    @app_exec
-    async def submit(self: Generic, output_file: str) -> None:
+    #@app_exec
+    def submit(self: Generic, output_file: str) -> None:
         """
         Description
         -----------
@@ -273,17 +273,21 @@ class WorkloadManager:
                 "and/or located. Aborting!!!"
             )
             raise WorkloadManagerError(msg=msg)
-        exec_obj = parser_interface.object_define()
-        os.chmod(output_file, 0o755) # TODO: Need something for ufs_pyutils.
-        exec_obj.stdout = "/dev/null"
-        exec_obj.stderr = "/dev/null"
-        exec_obj.stdin = ["/dev/null"]
-        exec_obj.exec_path = f"{output_file}"
-        exec_obj.run_path = os.path.dirname(output_file)
-        if len(exec_obj.run_path) == 0:
-            exec_obj.run_path = os.getcwd()
-        exec_obj.scheduler = self.wrkldmngr
-        exec_obj.launcher = f"{app_path}"
+
+        subprocess.Popen(f"{app_path} {output_fie}", stdout=subprocess.DEVNULL,
+                         stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
+        
+        #exec_obj = parser_interface.object_define()
+        #os.chmod(output_file, 0o755) # TODO: Need something for ufs_pyutils.
+        #exec_obj.stdout = "/dev/null"
+        #exec_obj.stderr = "/dev/null"
+        #exec_obj.stdin = ["/dev/null"]
+        #exec_obj.exec_path = f"{output_file}"
+        #exec_obj.run_path = os.path.dirname(output_file)
+        #if len(exec_obj.run_path) == 0:
+        #    exec_obj.run_path = os.getcwd()
+        #exec_obj.scheduler = self.wrkldmngr
+        #exec_obj.launcher = f"{app_path}"
 
         return exec_obj
 
