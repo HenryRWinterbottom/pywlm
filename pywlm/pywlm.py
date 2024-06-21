@@ -279,6 +279,7 @@ class WorkloadManager:
         if len(exec_obj.run_path) == 0:
             exec_obj.run_path = os.getcwd()
         exec_obj.scheduler = self.wrkldmngr
+        exec_obj.launcher = f"{app_path}"
 
         return exec_obj
 
