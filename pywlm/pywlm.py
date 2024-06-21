@@ -43,6 +43,7 @@ History
 # ----
 
 import asyncio
+import subprocess
 import os
 from types import SimpleNamespace
 from typing import Dict, Generic, Tuple
@@ -273,7 +274,10 @@ class WorkloadManager:
             )
             raise WorkloadManagerError(msg=msg)
         exec_obj = parser_interface.object_define()
-        os.chmod(output_file, 0o755)
+        os.chmod(output_file, 0o755) # TODO: Need something for ufs_pyutils.
+        exec_obj.stdout = subprocess.DEVNULL
+        exec_obj.stderr = subprocess.DEVNULL
+        exec_obj.stdin = [subprocess.DEVNULL]
         exec_obj.exec_path = f"{output_file}"
         exec_obj.run_path = os.path.dirname(output_file)
         if len(exec_obj.run_path) == 0:
