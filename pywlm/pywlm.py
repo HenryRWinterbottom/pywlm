@@ -51,7 +51,7 @@ from confs.jinja2_interface import write_from_template
 from confs.yaml_interface import YAML
 from execute.executable_interface import app_exec
 from tools import parser_interface
-from tools.system_interface import get_app_path
+from tools.system_interface import get_app_path, sleep
 from utils.decorator_interface import privatemethod
 from utils.logger_interface import Logger
 
@@ -278,6 +278,8 @@ class WorkloadManager:
         if len(exec_obj.run_path) == 0:
             exec_obj.run_path = os.getcwd()
         exec_obj.scheduler = self.wrkldmngr
+
+        sleep(seconds=10)
 
         return exec_obj
 
