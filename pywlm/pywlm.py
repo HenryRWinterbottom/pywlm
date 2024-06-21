@@ -42,6 +42,8 @@ History
 
 # ----
 
+import asyncio
+import subprocess
 import os
 from types import SimpleNamespace
 from typing import Dict, Generic, Tuple
@@ -50,11 +52,11 @@ from confs.jinja2_interface import write_from_template
 from confs.yaml_interface import YAML
 from execute.executable_interface import app_exec
 from tools import parser_interface
-from tools.system_interface import get_app_path
+from tools.system_interface import get_app_path, sleep
 from utils.decorator_interface import privatemethod
 from utils.logger_interface import Logger
 
-from exceptions import WorkloadManagerError
+from pywlm.exceptions import WorkloadManagerError
 
 # ----
 
@@ -170,7 +172,7 @@ class WorkloadManager:
         )
         if wrkldmngr_dict is None:
             msg = (
-                f"The attributes for workfload manager {self.wrkldmngr} could not "
+                f"The attributes for workload manager {self.wrkldmngr} could not "
                 f"be determined from the schema file path {self.schema_file}. Aborting!!!"
             )
             raise WorkloadManagerError(msg=msg)
@@ -225,8 +227,7 @@ class WorkloadManager:
 
         return shell_obj
 
-    @app_exec
-    async def submit(self: Generic, output_file: str) -> None:
+    def submit(self: Generic, output_file: str) -> None:
         """
         Description
         -----------
@@ -271,17 +272,15 @@ class WorkloadManager:
                 "and/or located. Aborting!!!"
             )
             raise WorkloadManagerError(msg=msg)
-        exec_obj = parser_interface.object_define()
-        exec_obj.exec_path = f"{app_path} {output_file}"
-        exec_obj.run_path = os.path.dirname(output_file)
-        if len(exec_obj.run_path) == 0:
-            exec_obj.run_path = os.getcwd()
-        exec_obj.scheduler = self.wrkldmngr
-
-        return exec_obj
+        cmd = [f"{app_path}", f"{output_file}"]
+        proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL, 
+                                stdin=subprocess.DEVNULL)
+        msg = f"Script {output_file} submitted as job {proc.pid}."
+        self.logger.info(msg=msg)
 
     @privatemethod
-    async def write(self: Generic, wlm_dict: Dict, output_file: str) -> None:
+    def write(self: Generic, wlm_dict: Dict, output_file: str) -> None:
         """
         Description
         -----------
@@ -333,7 +332,7 @@ class WorkloadManager:
             )
             raise WorkloadManagerError(msg=msg) from errmsg
 
-    async def run(
+    def run(
         self: Generic, wlm_dict: Dict, output_file: str, annotate: str
     ) -> None:
         """
@@ -351,5 +350,5 @@ class WorkloadManager:
         """
 
         # Build and submit the workload manager script.
-        await self.write(wlm_dict=wlm_dict, output_file=output_file)
-        await self.submit(output_file=output_file)
+        self.write(wlm_dict=wlm_dict, output_file=output_file)
+        self.submit(output_file=output_file)
